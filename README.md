@@ -22,7 +22,7 @@ Conversion video guide by Thomas Sanladerer: https://youtu.be/aLLci32tHA4
 
 Firmware changes as documented on https://wiki.e3d-online.com/E3D-v6_on_Ultimaker_2
 
-Changes in the "configuration.h" file then here are the edits:
+Changes in the "configuration.h" file:
 
     // increase the maximum temperature for the E3D V6 HotEnd
     #define HEATER_0_MAXTEMP 400
