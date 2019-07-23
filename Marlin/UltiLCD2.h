@@ -19,14 +19,13 @@ void doCooldown();
 #define LCD_ALERTMESSAGEPGM(x)
 
 extern unsigned long lastSerialCommandTime;
-extern uint8_t led_brightness_level;
-extern uint8_t led_mode;
+extern uint8_t hotend_fan_pwm_level;
+extern uint8_t hotend_fan_mode;
 extern float dsp_temperature[EXTRUDERS];
 extern float dsp_temperature_bed;
-#define LED_MODE_ALWAYS_ON      0
-#define LED_MODE_ALWAYS_OFF     1
-#define LED_MODE_WHILE_PRINTING 2
-#define LED_MODE_BLINK_ON_DONE  3
+#define HOTEND_FAN_MODE_ALWAYS_ON      0
+#define HOTEND_FAN_MODE_ALWAYS_OFF     1
+#define HOTEND_FAN_MODE_WHILE_PRINTING 2
 
 void lcd_menu_main();
 

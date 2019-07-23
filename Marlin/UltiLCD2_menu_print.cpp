@@ -376,8 +376,8 @@ void lcd_menu_print_select()
                 card.openFile(card.filename, true);
                 if (card.isFileOpen() && !is_command_queued())
                 {
-                    if (led_mode == LED_MODE_WHILE_PRINTING || led_mode == LED_MODE_BLINK_ON_DONE)
-                        analogWrite(LED_PIN, 255 * int(led_brightness_level) / 100);
+                    if (hotend_fan_mode == HOTEND_FAN_MODE_WHILE_PRINTING)
+                        analogWrite(LED_PIN, 255 * int(hotend_fan_pwm_level) / 100);
                     LCD_CACHE_ID(0) = 255;
                     if (card.longFilename[0])
                         strcpy(LCD_CACHE_FILENAME(0), card.longFilename);
@@ -662,16 +662,10 @@ static void lcd_menu_print_abort()
 
 static void postPrintReady()
 {
-    if (led_mode == LED_MODE_BLINK_ON_DONE)
-        analogWrite(LED_PIN, 0);
 }
 
 static void lcd_menu_print_ready()
 {
-    if (led_mode == LED_MODE_WHILE_PRINTING)
-        analogWrite(LED_PIN, 0);
-    else if (led_mode == LED_MODE_BLINK_ON_DONE)
-        analogWrite(LED_PIN, (led_glow << 1) * int(led_brightness_level) / 100);
     lcd_info_screen(lcd_menu_main, postPrintReady, PSTR("BACK TO MENU"));
     //unsigned long printTimeSec = (stoptime-starttime)/1000;
     if (current_temperature[0] > 60 || current_temperature_bed > 40)
@@ -696,21 +690,22 @@ static void lcd_menu_print_ready()
         int_to_string(dsp_temperature_bed, c, PSTR("C"));
 #endif
         lcd_lib_draw_string_center(25, buffer);
-    }else{
+    }
+    else
+    {
         currentMenu = lcd_menu_print_ready_cooled_down;
+        if (hotend_fan_mode == HOTEND_FAN_MODE_WHILE_PRINTING)
+            analogWrite(LED_PIN, 0);
     }
     lcd_lib_update_screen();
 }
 
 static void lcd_menu_print_ready_cooled_down()
 {
-    if (led_mode == LED_MODE_WHILE_PRINTING)
+    if (hotend_fan_mode == HOTEND_FAN_MODE_WHILE_PRINTING)
         analogWrite(LED_PIN, 0);
-    else if (led_mode == LED_MODE_BLINK_ON_DONE)
-        analogWrite(LED_PIN, (led_glow << 1) * int(led_brightness_level) / 100);
     lcd_info_screen(lcd_menu_main, postPrintReady, PSTR("BACK TO MENU"));
 
-    LED_GLOW();
     lcd_lib_draw_string_centerP(10, PSTR("Print finished"));
     lcd_lib_draw_string_centerP(30, PSTR("You can remove"));
     lcd_lib_draw_string_centerP(40, PSTR("the print."));
@@ -748,7 +743,7 @@ static char* tune_item_callback(uint8_t nr)
     else if (nr == 4 + BED_MENU_OFFSET + EXTRUDERS * 2)
         strcpy_P(c, PSTR("Retraction"));
     else if (nr == 5 + BED_MENU_OFFSET + EXTRUDERS * 2)
-        strcpy_P(c, PSTR("LED Brightness"));
+        strcpy_P(c, PSTR("Hotend Fan PWM"));
     return c;
 }
 
@@ -789,9 +784,9 @@ static void tune_item_details_callback(uint8_t nr)
 #endif
     else if (nr == 6 + BED_MENU_OFFSET + EXTRUDERS)
     {
-        c = int_to_string(led_brightness_level, c, PSTR("%"));
-        if (led_mode == LED_MODE_ALWAYS_ON ||  led_mode == LED_MODE_WHILE_PRINTING || led_mode == LED_MODE_BLINK_ON_DONE)
-            analogWrite(LED_PIN, 255 * int(led_brightness_level) / 100);
+        c = int_to_string(hotend_fan_pwm_level, c, PSTR("%"));
+        if (hotend_fan_mode == HOTEND_FAN_MODE_ALWAYS_ON ||  hotend_fan_mode == HOTEND_FAN_MODE_WHILE_PRINTING )
+            analogWrite(LED_PIN, 255 * int(hotend_fan_pwm_level) / 100);
     }
     else
         return;
@@ -884,7 +879,7 @@ static void lcd_menu_print_tune()
         else if (IS_SELECTED_SCROLL(4 + BED_MENU_OFFSET + EXTRUDERS * 2))
             lcd_change_to_menu(lcd_menu_print_tune_retraction);
         else if (IS_SELECTED_SCROLL(5 + BED_MENU_OFFSET + EXTRUDERS * 2))
-            LCD_EDIT_SETTING(led_brightness_level, "Brightness", "%", 0, 100);
+            LCD_EDIT_SETTING(hotend_fan_pwm_level, "Hotend fan PWM", "%", 0, 100);
     }
 }
 

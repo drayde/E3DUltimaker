@@ -81,8 +81,8 @@ void Config_StoreSettings()
   #endif
   EEPROM_WRITE_VAR(i,motor_current_setting);
   #ifdef ENABLE_ULTILCD2
-  EEPROM_WRITE_VAR(i,led_brightness_level);
-  EEPROM_WRITE_VAR(i,led_mode);
+  EEPROM_WRITE_VAR(i,hotend_fan_pwm_level);
+  EEPROM_WRITE_VAR(i,hotend_fan_mode);
   #else
   uint8_t dummyByte=0;
   EEPROM_WRITE_VAR(i,dummyByte);
@@ -212,8 +212,8 @@ void Config_RetrieveSettings()
         EEPROM_READ_VAR(i,Kd);
         EEPROM_READ_VAR(i,motor_current_setting);
         #ifdef ENABLE_ULTILCD2
-        EEPROM_READ_VAR(i,led_brightness_level);
-        EEPROM_READ_VAR(i,led_mode);
+        EEPROM_READ_VAR(i,hotend_fan_pwm_level);
+        EEPROM_READ_VAR(i,hotend_fan_mode);
         #else
         uint8_t dummyByte;
         EEPROM_READ_VAR(i,dummyByte);
@@ -290,8 +290,8 @@ void Config_ResetDefault()
     motor_current_setting[2] = tmp_motor_current_setting[2];
 
     #ifdef ENABLE_ULTILCD2
-    led_brightness_level = 100;
-    led_mode = LED_MODE_ALWAYS_ON;
+    hotend_fan_pwm_level = 255;
+    hotend_fan_mode = HOTEND_FAN_MODE_ALWAYS_ON;
     #endif
     retract_length = 4.5;
     retract_feedrate = 25 * 60;

@@ -45,7 +45,7 @@ static char* lcd_advanced_item(uint8_t nr)
     if (nr == 0)
         strcpy_P(card.longFilename, PSTR("< RETURN"));
     else if (nr == 1)
-        strcpy_P(card.longFilename, PSTR("LED settings"));
+        strcpy_P(card.longFilename, PSTR("Hotend fan settings"));
     else if (nr == 2)
 #if EXTRUDERS < 2
         strcpy_P(card.longFilename, PSTR("Heatup nozzle"));
@@ -97,7 +97,7 @@ static void lcd_advanced_details(uint8_t nr)
     buffer[0] = '\0';
     if (nr == 1)
     {
-        int_to_string(led_brightness_level, buffer, PSTR("%"));
+        int_to_string(hotend_fan_pwm_level, buffer, PSTR("%"));
     }else if (nr == 2)
     {
         int_to_string(int(dsp_temperature[0]), buffer, PSTR("C/"));
@@ -491,18 +491,16 @@ static char* lcd_led_item(uint8_t nr)
     if (nr == 0)
         strcpy_P(card.longFilename, PSTR("< RETURN"));
     else if (nr == 1)
-        strcpy_P(card.longFilename, PSTR("Brightness"));
+        strcpy_P(card.longFilename, PSTR("PWM"));
     else if (nr == 2)
         strcpy_P(card.longFilename, PSTR(" Always On"));
     else if (nr == 3)
         strcpy_P(card.longFilename, PSTR(" Always Off"));
     else if (nr == 4)
         strcpy_P(card.longFilename, PSTR(" On while printing"));
-    else if (nr == 5)
-        strcpy_P(card.longFilename, PSTR(" Glow when done"));
     else
         strcpy_P(card.longFilename, PSTR("???"));
-    if (nr - 2 == led_mode)
+    if (nr - 2 == hotend_fan_mode)
         card.longFilename[0] = '>';
     return card.longFilename;
 }
@@ -514,46 +512,41 @@ static void lcd_led_details(uint8_t nr)
         return;
     else if(nr == 1)
     {
-        int_to_string(led_brightness_level, buffer, PSTR("%"));
+        int_to_string(hotend_fan_pwm_level, buffer, PSTR("%"));
         lcd_lib_draw_string(5, 53, buffer);
     }
 }
 
 static void lcd_menu_maintenance_led()
 {
-    analogWrite(LED_PIN, 255 * int(led_brightness_level) / 100);
-    lcd_scroll_menu(PSTR("LED"), 6, lcd_led_item, lcd_led_details);
+    analogWrite(LED_PIN, 255 * int(hotend_fan_pwm_level) / 100);
+    lcd_scroll_menu(PSTR("Hotend fan"), 6, lcd_led_item, lcd_led_details);
     if (lcd_lib_button_pressed)
     {
         if (IS_SELECTED_SCROLL(0))
         {
-            if (led_mode != LED_MODE_ALWAYS_ON)
+            if (hotend_fan_mode != HOTEND_FAN_MODE_ALWAYS_ON)
                 analogWrite(LED_PIN, 0);
             Config_StoreSettings();
             lcd_change_to_menu(lcd_menu_maintenance_advanced, SCROLL_MENU_ITEM_POS(1));
         }
         else if (IS_SELECTED_SCROLL(1))
         {
-            LCD_EDIT_SETTING(led_brightness_level, "Brightness", "%", 0, 100);
+            LCD_EDIT_SETTING(hotend_fan_pwm_level, "Hotend fan PWM", "%", 0, 100);
         }
         else if (IS_SELECTED_SCROLL(2))
         {
-            led_mode = LED_MODE_ALWAYS_ON;
+            hotend_fan_mode = HOTEND_FAN_MODE_ALWAYS_ON;
             lcd_lib_beep();
         }
         else if (IS_SELECTED_SCROLL(3))
         {
-            led_mode = LED_MODE_ALWAYS_OFF;
+            hotend_fan_mode = HOTEND_FAN_MODE_ALWAYS_OFF;
             lcd_lib_beep();
         }
         else if (IS_SELECTED_SCROLL(4))
         {
-            led_mode = LED_MODE_WHILE_PRINTING;
-            lcd_lib_beep();
-        }
-        else if (IS_SELECTED_SCROLL(5))
-        {
-            led_mode = LED_MODE_BLINK_ON_DONE;
+            hotend_fan_mode = HOTEND_FAN_MODE_WHILE_PRINTING;
             lcd_lib_beep();
         }
     }

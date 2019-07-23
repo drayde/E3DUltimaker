@@ -19,8 +19,8 @@
 
 unsigned long lastSerialCommandTime;
 bool serialScreenShown;
-uint8_t led_brightness_level = 100;
-uint8_t led_mode = LED_MODE_ALWAYS_ON;
+uint8_t hotend_fan_pwm_level = 255;
+uint8_t hotend_fan_mode = HOTEND_FAN_MODE_ALWAYS_ON;
 float dsp_temperature[EXTRUDERS] = { 20.0 };
 float dsp_temperature_bed = 20.0;
 
@@ -171,12 +171,10 @@ void lcd_menu_startup()
     }
     lcd_lib_update_screen();
 
-    if (led_mode == LED_MODE_ALWAYS_ON)
-        analogWrite(LED_PIN, int(led_glow << 1) * led_brightness_level / 100);
     if (led_glow_dir || lcd_lib_button_pressed)
     {
-        if (led_mode == LED_MODE_ALWAYS_ON)
-            analogWrite(LED_PIN, 255 * led_brightness_level / 100);
+        if (hotend_fan_mode == HOTEND_FAN_MODE_ALWAYS_ON)
+            analogWrite(LED_PIN, 255 * hotend_fan_pwm_level / 100);
         led_glow = led_glow_dir = 0;
         LED_NORMAL();
         if (lcd_lib_button_pressed)
