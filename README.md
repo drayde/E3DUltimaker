@@ -4,12 +4,13 @@ This firmware is for a Ultimaker 2 with the E3D Upgrade Kit installed, which inc
 
 The firmware is a fork of the original Ultimaker firmware:
 https://github.com/Ultimaker/Ultimaker2Marlin
+
 The original README ist included as README_orig in this repro.
 
 Changes have been made to the source code by E3D to work with the changed setup.
-The orgiginal E3D fork is no longer online, but should match the *e3d-latest* branch in this repro.
+The orginal E3D fork is no longer online, but should match the *e3d-latest* branch in this repro.
 
-# Links
+## Links
 
 Old wiki page on e3d-online.com: https://wiki.e3d-online.com/E3D-v6_on_Ultimaker_2
 
@@ -17,7 +18,7 @@ Conversion video guide by Thomas Sanladerer: https://youtu.be/aLLci32tHA4
 
 3D printed parts on thingiverse: https://www.thingiverse.com/thing:1934309
 
-## Firmware changes
+## Firmware changes by E3D
 
 Firmware changes as documented on https://wiki.e3d-online.com/E3D-v6_on_Ultimaker_2
 
@@ -25,17 +26,20 @@ Changes in the "configuration.h" file then here are the edits:
 
     // increase the maximum temperature for the E3D V6 HotEnd
     #define HEATER_0_MAXTEMP 400
-    
+
+
     // PID values for Ultimaker2 with E3D HotEnd
     #define  DEFAULT_Kp 36.59
     #define  DEFAULT_Ki 3.65
     #define  DEFAULT_Kd 91.72
-    
+
+
     // travel extents have reduced slightly for E3D HotEnd
     #define X_MAX_POS 215 // For E3D HotEnd
     #define Y_MAX_POS 210 // For E3D HotEnd
     #define INVERT_E0_DIR true   // for direct drive extruder v9 set to true, for geared extruder set to false
-    
+
+
     // default steps per unit for Ultimaker2 and E3D Extruder
     #define DEFAULT_AXIS_STEPS_PER_UNIT   {80.0,80.0,200,837}   // 837 to be changed to 418.5 for if a 200 steps/mm motor is used
     #define DEFAULT_MAX_FEEDRATE          {300, 300, 40, 20}    // (mm/sec)
@@ -63,3 +67,7 @@ If you want to disable this feature like it was back in v14.09 then you can comm
     // Commented out for UM2 because too sensitive for E3D HotEnd           
     //            disable_heater();
     //            Stop(STOP_REASON_HEATER_ERROR);
+
+## My firmware changes 
+
+none yet :-)
