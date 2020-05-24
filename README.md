@@ -13,6 +13,7 @@ The orginal E3D fork is no longer online, but should match the *e3d-latest* bran
 ## Links
 
 Old wiki page on e3d-online.com: https://wiki.e3d-online.com/E3D-v6_on_Ultimaker_2
+([local copy as pdf](https://github.com/drayde/E3DUltimaker/blob/drayde/E3D-v6%20on%20Ultimaker%202%20-%20E3D-Online.pdf))
 
 Conversion video guide by Thomas Sanladerer: https://youtu.be/aLLci32tHA4
 
